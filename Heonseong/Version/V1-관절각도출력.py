@@ -53,11 +53,11 @@ with mp_hands.Hands(
 
                 curr_time = time.time()
                 if curr_time - prev_time >= 1:  # 1초에 한 번 출력
-                    print("Flexion angles (degrees):")
+                    # print("Flexion angles (degrees):")
                     for finger_angle in flexion_angles:
-                        print(finger_angle)
+                        print(finger_angle,end="\n")
                         break
-                    print()  # 줄바꿈
+                    print(',',end="\n")  # 줄바꿈
                     prev_time = curr_time
 
                 mp_drawing.draw_landmarks(

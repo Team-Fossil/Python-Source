@@ -1,3 +1,7 @@
+"""
+아래 코드에서 출력값을 정수로 바꿔줘 이때 소수점 2번째에서 반올림할게.
+"""
+
 import cv2
 import mediapipe as mp
 import math
