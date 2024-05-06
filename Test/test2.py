@@ -1,11 +1,13 @@
-import torch
+import requests
 
-# 1, 2, 3이 들어 있는 텐서를 만듭니다.
-a = torch.tensor([1, 2, 3])
-# 4, 5, 6이 들어 있는 텐서를 만듭니다.
-b = torch.tensor([4, 5, 6])
-# 두 텐서의 합을 구합니다.
-c = a + b
+url = 'http://ws.bus.go.kr/api/rest/arrive/getLowArrInfoByStId'
+params ={'serviceKey' : 'nyVvF841UBPdCn+vugXzKE1EEwkhTBIhjhaXOQgC/AlD2F0YongS3tfgXgIxbW5lmlkuJ6Szjamn18IPVNMpXA==', 'stId' : '112000001' }
 
-# 텐서를 출력합니다.
-print(c)
+response = requests.get(url, params=params)
+print(response.content)
+"""
+
+
+	
+nyVvF841UBPdCn+vugXzKE1EEwkhTBIhjhaXOQgC/AlD2F0YongS3tfgXgIxbW5lmlkuJ6Szjamn18IPVNMpXA==
+"""

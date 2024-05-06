@@ -1,9 +1,10 @@
 """
-출력값을 정수 (0~180)
-위 코드의 출력이 1초에 한번으로 수정
-위 코드에서 손가락 각도를 나타내는 부분을 매핑
-
-*출력값 정리 완료 : 1차원 배열
+AngleControl_V1
+작성자 : 이헌성
+작성일 : 2024.05.01
+알고리즘 설명
+- 새끼 손가락의 각도만 출력하도록 prototype 코드 수정
+-> 새끼 손가락의 각도 출력 오류 발생
 """
 import cv2
 import mediapipe as mp
@@ -36,17 +37,11 @@ with mp_hands.Hands(
                 flexion_angles = []
                 # 각 손가락의 굽힘 각도 계산
                 for finger in mp_hands.HandLandmark:
-                    joint_ids = [finger.WRIST, finger.THUMB_CMC, finger.THUMB_MCP, finger.THUMB_IP, finger.THUMB_TIP,
-                                 finger.INDEX_FINGER_MCP, finger.INDEX_FINGER_PIP, finger.INDEX_FINGER_DIP, finger.INDEX_FINGER_TIP,
-                                 finger.MIDDLE_FINGER_MCP, finger.MIDDLE_FINGER_PIP, finger.MIDDLE_FINGER_DIP, finger.MIDDLE_FINGER_TIP,
-                                 finger.RING_FINGER_MCP, finger.RING_FINGER_PIP, finger.RING_FINGER_DIP, finger.RING_FINGER_TIP,
-                                 finger.PINKY_MCP, finger.PINKY_PIP, finger.PINKY_DIP, finger.PINKY_TIP]
+                    
+                    joint_ids = [finger.PINKY_MCP, finger.PINKY_PIP, finger.PINKY_DIP, finger.PINKY_TIP]
                     finger_angles = []
                     for i in range(len(joint_ids) - 1):
                         idx1, idx2 = joint_ids[i], joint_ids[i+1]
-                        '''----------------------'''
-                        "1번 인덱스 확인 : "
-                        '''----------------------'''
                         x1, y1, z1 = hand_landmarks.landmark[idx1].x, hand_landmarks.landmark[idx1].y, hand_landmarks.landmark[idx1].z
                         x2, y2, z2 = hand_landmarks.landmark[idx2].x, hand_landmarks.landmark[idx2].y, hand_landmarks.landmark[idx2].z
                         angle_rad = math.atan2(math.sqrt((y2-y1)**2 + (z2-z1)**2), x2-x1)
