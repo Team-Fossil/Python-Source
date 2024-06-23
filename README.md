@@ -1,17 +1,10 @@
-"""
-출력값을 정수 (0~180)
-위 코드의 출력이 1초에 한번으로 수정
-위 코드에서 손가락 각도를 나타내는 부분을 매핑
-
-*출력값 정리 완료 : 1차원 배열
-"""
 import cv2
 import mediapipe as mp
 import math
 import time
 
 mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles  
+mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 cap = cv2.VideoCapture(0)
@@ -35,32 +28,25 @@ with mp_hands.Hands(
             for hand_landmarks in results.multi_hand_landmarks:
                 flexion_angles = []
                 # 각 손가락의 굽힘 각도 계산
-                for finger in mp_hands.HandLandmark:
-                    joint_ids = [finger.WRIST, finger.THUMB_CMC, finger.THUMB_MCP, finger.THUMB_IP, finger.THUMB_TIP,
-                                 finger.INDEX_FINGER_MCP, finger.INDEX_FINGER_PIP, finger.INDEX_FINGER_DIP, finger.INDEX_FINGER_TIP,
-                                 finger.MIDDLE_FINGER_MCP, finger.MIDDLE_FINGER_PIP, finger.MIDDLE_FINGER_DIP, finger.MIDDLE_FINGER_TIP,
-                                 finger.RING_FINGER_MCP, finger.RING_FINGER_PIP, finger.RING_FINGER_DIP, finger.RING_FINGER_TIP,
-                                 finger.PINKY_MCP, finger.PINKY_PIP, finger.PINKY_DIP, finger.PINKY_TIP]
-                    finger_angles = []
-                    for i in range(len(joint_ids) - 1):
-                        idx1, idx2 = joint_ids[i], joint_ids[i+1]
-                        '''----------------------'''
-                        "1번 인덱스 확인 : "
-                        '''----------------------'''
-                        x1, y1, z1 = hand_landmarks.landmark[idx1].x, hand_landmarks.landmark[idx1].y, hand_landmarks.landmark[idx1].z
-                        x2, y2, z2 = hand_landmarks.landmark[idx2].x, hand_landmarks.landmark[idx2].y, hand_landmarks.landmark[idx2].z
-                        angle_rad = math.atan2(math.sqrt((y2-y1)**2 + (z2-z1)**2), x2-x1)
-                        angle_deg = round(math.degrees(angle_rad), 2)
-                        finger_angles.append(int(angle_deg))  # 정수로 변환하여 추가
-                    flexion_angles.append(finger_angles)
+                joint_ids = [
+                    mp_hands.HandLandmark.WRIST,
+                    mp_hands.HandLandmark.THUMB_CMC, mp_hands.HandLandmark.THUMB_MCP, mp_hands.HandLandmark.THUMB_IP, mp_hands.HandLandmark.THUMB_TIP,
+                    mp_hands.HandLandmark.INDEX_FINGER_MCP, mp_hands.HandLandmark.INDEX_FINGER_PIP, mp_hands.HandLandmark.INDEX_FINGER_DIP, mp_hands.HandLandmark.INDEX_FINGER_TIP,
+                    mp_hands.HandLandmark.MIDDLE_FINGER_MCP, mp_hands.HandLandmark.MIDDLE_FINGER_PIP, mp_hands.HandLandmark.MIDDLE_FINGER_DIP, mp_hands.HandLandmark.MIDDLE_FINGER_TIP,
+                    mp_hands.HandLandmark.RING_FINGER_MCP, mp_hands.HandLandmark.RING_FINGER_PIP, mp_hands.HandLandmark.RING_FINGER_DIP, mp_hands.HandLandmark.RING_FINGER_TIP,
+                    mp_hands.HandLandmark.PINKY_MCP, mp_hands.HandLandmark.PINKY_PIP, mp_hands.HandLandmark.PINKY_DIP, mp_hands.HandLandmark.PINKY_TIP
+                ]
+                for i in range(len(joint_ids) - 1):
+                    idx1, idx2 = joint_ids[i], joint_ids[i+1]
+                    x1, y1, z1 = hand_landmarks.landmark[idx1].x, hand_landmarks.landmark[idx1].y, hand_landmarks.landmark[idx1].z
+                    x2, y2, z2 = hand_landmarks.landmark[idx2].x, hand_landmarks.landmark[idx2].y, hand_landmarks.landmark[idx2].z
+                    angle_rad = math.atan2(math.sqrt((y2-y1)**2 + (z2-z1)**2), x2-x1)
+                    angle_deg = round(math.degrees(angle_rad), 2)
+                    flexion_angles.append(int(angle_deg))  # 정수로 변환하여 추가
 
                 curr_time = time.time()
                 if curr_time - prev_time >= 1:  # 1초에 한 번 출력
-                    # print("Flexion angles (degrees):")
-                    for finger_angle in flexion_angles:
-                        print(finger_angle,end="\n")
-                        break
-                    print(',',end="\n")  # 줄바꿈
+                    print(f"{flexion_angles},")  # 배열 뒤에 컴마 추가
                     prev_time = curr_time
 
                 mp_drawing.draw_landmarks(
